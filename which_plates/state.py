@@ -33,7 +33,7 @@ class State:
         """
         self.plates = plates
         self.action = action
-        self.bar = sorted(bar)
+        self.bar = bar
         self.path_cost = path_cost
         self.goals = goals
         self.goal_i = goal_i
@@ -49,6 +49,10 @@ class State:
     def __str__(self):
         return "\nnode: {0}\naction: {1}\npath_cost: {2}".\
             format(self.node(), self.action, self.path_cost)
+
+    
+    def __lt__(self, other):
+        return self.f_score() < other.f_score()
 
 
     def node(self):
@@ -119,8 +123,8 @@ class State:
 
     def lift_child(self):
         """create a child that represents the lift plates state"""
-        action    = Action("l", self.bar)
         bar       = self.bar.copy()
+        action    = Action("l", bar)
         plates    = self.plates.copy()
         edge_cost = 0
         goal_i    = self.goal_i + 1
@@ -132,8 +136,8 @@ class State:
 
     def add_child(self, weight):
         """create a child that represents the add plates state"""
-        action    = Action("+", [weight])
         bar       = self.bar + [weight]
+        action    = Action("+", [weight])
         plates    = self.plates.copy()
         edge_cost = 0
         goal_i    = self.goal_i
@@ -147,8 +151,8 @@ class State:
 
     def remove_child(self, weights_removed):
         """create a child that represents the remove plates state"""
-        action    = Action('-', weights_removed)
         bar       = self.bar[:-len(weights_removed)]
+        action    = Action('-', weights_removed)
         plates    = self.plates.copy()
         edge_cost = sum(weights_removed)
         goal_i    = self.goal_i

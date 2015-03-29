@@ -124,6 +124,38 @@ def mock_item_two():
 def a_star_search_with_state_0(state_0):
     return a_star_search(state_0, PriorityQue)
 
+# actual problem setup
+
+@pytest.fixture(scope="module")
+def state_start():
+    action    = Action("", [])
+    bar       = []
+    plates    = Counter({20: 1, 25: 1, 15: 1, 10: 2})
+    path_cost = 0
+    goals     = (20, 25, 40, 0)
+    goal_i    = 0
+    parent    = None
+
+    return State(action, bar, plates, path_cost, goals, goal_i, parent)
+
+@pytest.fixture(scope="module")
+def state_finish():
+    action    = Action("l", [25, 15])
+    bar       = [25, 15]
+    plates    = Counter({20: 1, 25: 0, 15: 0, 10: 2})
+    path_cost = 20
+    goals     = (20, 25, 40, 0)
+    goal_i    = 3
+    parent    = MagicMock # TODO do we want to test parent?
+
+    return State(action, bar, plates, path_cost, goals, goal_i, parent)
+
+@pytest.fixture(scope="module")
+def a_star_search_with_state_start(state_start):
+    return a_star_search(state_start, PriorityQue)
+
+
+
 
 
 
