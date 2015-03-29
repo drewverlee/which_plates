@@ -1,10 +1,15 @@
 """
-Contains the State class
+Contains: 
+
+* the State class
+* Action namedtuple
+* Priority namedtuple
 """
 from collections import Counter, namedtuple
 
-Action = namedtuple("Action", ["action", "weights"])
-Priority = namedtuple("Priority", ["f_score", "goal_i"])
+Action = namedtuple("Action", ["move", "weights"])
+Priority = namedtuple("Priority", ["f_score", "goal_i", "used"])
+Node = namedtuple("Node", ["bar", "goal_i"])
 
 class State:
 
@@ -21,70 +26,125 @@ class State:
     the path cost to reach this point.
     """
 
-    def __init__(self, action, bar, plates, path_cost, goals, goal_i, parent):
+    def __init__(self, action, bar, plates, path_cost, path_used, goals, goal_i, parent):
         """
         action    : tuple : containing (""/"l"/"+"/"-", (weights,))
-        path_cost : int    : the cost of this branch (all parent states up to the root)
-        parent    : State  : the parent State
-        goals     : tuple  : the goals of the problem, in this case, weight to lift
         bar       : list   : the weights currently on the bar, top is last/-1
         plates    : counter: the number of available plates
+        path_cost : int    : the cost of this branch (all parent states up to the root)
+        path_used : int    : total number of plates used of this branch
+        parent    : State  : the parent State
+        goals     : tuple  : the goals of the problem, in this case, weight to lift
+
+
         goal_i    : int    : the current index of our goal
         """
         self.plates = plates
         self.action = action
         self.bar = bar
         self.path_cost = path_cost
+        self.path_used = path_used
         self.goals = goals
         self.goal_i = goal_i
         self.parent = parent
         
         self.goal = self.goals[goal_i]
 
-
     def __repr__(self):
-        return "{0}, {1}, {2}".format(self.node(), self.action, self.path_cost)
-
+        return """
+            {action},
+            {bar},
+            {plates},
+            {path_cost},
+            {path_used},
+            {goal},
+            {goal_i},
+            {goals},
+            {g_score},
+            {h_score},
+            {f_score},
+            """.format(
+                    action    = self.action,
+                    bar       = self.bar,
+                    plates    = self.plates,
+                    path_cost = self.path_cost,
+                    path_used = self.path_used,
+                    goal      = self.goal,
+                    goal_i    = self.goal_i,
+                    goals     = self.goals,
+                    g_score   = self.g_score(),
+                    h_score   = self.h_score(),
+                    f_score   = self.f_score()
+                )
 
     def __str__(self):
-        return "\nnode: {0}\naction: {1}\npath_cost: {2}".\
-            format(self.node(), self.action, self.path_cost)
+        return """
+            ============= * STATE * ============= 
+            action    : {action}
+            bar       : {bar}
+            plates    : {plates}
 
-    
+            path cost : {path_cost}
+            path used : {path_used}
+
+            goal      : {goal}
+            goal_i    : {goal_i}
+            goals     : {goals}
+
+            g score   : {g_score}
+            h score   : {h_score}
+            f score   : {f_score}
+            """.format(
+                    action    = self.action,
+                    bar       = self.bar,
+                    plates    = self.plates,
+
+                    path_cost = self.path_cost,
+                    path_used = self.path_used,
+
+                    goal      = self.goal,
+                    goal_i    = self.goal_i,
+                    goals     = self.goals,
+
+                    g_score   = self.g_score(),
+                    h_score   = self.h_score(),
+                    f_score   = self.f_score()
+                )
+
+    # TODO, i don't think i should need this once priority is corrent,
+    # it indicates a tie that i didn't explicit break
     def __lt__(self, other):
         return self.f_score() < other.f_score()
 
-
-    def node(self):
-        """a node in the graph"""
-        return tuple(self.bar), self.goal_i
-
-
-    def at_final_goal(self):
-        """check if were at our final goal"""
-        # recall that we add 0 to the end of the goals
-        return self.goal_i == len(self.goals) - 1
-
+    def priority(self):
+        """return priority of the state"""
+        return Priority(self.f_score(), self.goal_i, self.path_used)
 
     def f_score(self):
         """return the f score"""
         return self.g_score() + self.h_score()
 
-
-    def h_score(self):
-        """return the h score"""
-        return self.goal - sum(self.bar)
-
-
     def g_score(self):
         """return the g score"""
         return self.path_cost
 
+    def h_score(self):
+        """return the h score
+       
+        the lift state is free
+        """
+        #TODO fix this... 
+        move = self.action.move
+        return self.goal - sum(self.bar) if (move == '+' or move == "-") else 0
 
-    def priority(self):
-        """return priority of the state"""
-        return Priority(self.f_score(), self.goal_i)
+    def node(self):
+        """a node in the graph"""
+        return Node(tuple(self.bar), self.goal_i)
 
+    def at_final_goal(self):
+        """check if were at our final goal"""
+        # NOTE: 0 is added to the every goals list to avoid index errors
+        return self.goal_i == len(self.goals) - 1
 
     def children(self):
         """create children of state
@@ -110,16 +170,13 @@ class State:
             if quantity > 0 and sum(self.bar) + weight <= self.goal:
                 children.append(self.add_child(weight))
 
-
         if not children:
             weights_removed = []
             for weight in reversed(self.bar):
                 weights_removed.append(weight)
                 children.append(self.remove_child(weights_removed))
 
-
         return children if children else [self.remove_child()]
-
 
     def lift_child(self):
         """create a child that represents the lift plates state"""
@@ -129,10 +186,10 @@ class State:
         edge_cost = 0
         goal_i    = self.goal_i + 1
         path_cost = self.path_cost + edge_cost if self.parent else edge_cost
+        path_used = self.path_used + 0
         parent    = self
 
-        return State(action, bar, plates, path_cost, self.goals, goal_i, parent) 
-
+        return State(action, bar, plates, path_cost, path_used, self.goals, goal_i, parent) 
 
     def add_child(self, weight):
         """create a child that represents the add plates state"""
@@ -142,12 +199,12 @@ class State:
         edge_cost = 0
         goal_i    = self.goal_i
         path_cost = self.path_cost + edge_cost if self.parent else edge_cost
+        path_used = self.path_used + 1
         parent    = self
 
         plates.subtract({weight: 1})
 
-        return State(action, bar, plates, path_cost, self.goals, goal_i, parent) 
-
+        return State(action, bar, plates, path_cost, path_used, self.goals, goal_i, parent) 
 
     def remove_child(self, weights_removed):
         """create a child that represents the remove plates state"""
@@ -157,9 +214,30 @@ class State:
         edge_cost = sum(weights_removed)
         goal_i    = self.goal_i
         path_cost = self.path_cost + edge_cost if self.parent else edge_cost
+        path_used = self.path_used + len(weights_removed)
         parent    = self
         
         for weight in weights_removed:
             plates.update({weight: 1})
 
-        return State(action, bar, plates, path_cost, self.goals, goal_i, parent) 
+        return State(action, bar, plates, path_cost, path_used, self.goals, goal_i, parent) 
+
+    def path(self):
+        """returns the path of actions leading to this state
+
+        
+        :returns: list: of (action, [plates])
+
+        """
+        path          = []
+        current_state = self
+        roots_parent  = None
+
+        while current_state != roots_parent:
+            path.append(current_state.action)
+            current_state = current_state.parent
+
+        path.reverse()
+
+        return path
+

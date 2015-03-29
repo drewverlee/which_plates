@@ -1,5 +1,7 @@
 """
-contains PriorityQue class
+contains:
+
+* PriorityQue: which extends list class and provides enqueue and deque methods
 """
 
 import heapq

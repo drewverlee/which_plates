@@ -1,10 +1,11 @@
-tests for States children method
+states 1-5
 
 Were going to walk through the steps of a simple A*problem
 checking the children along the way. In order to do this were going to
-need to check the various states along the way. Which is what our fixtures
-setup below. We choose a problem thats linear in fashion, so that
-each state only has one child state.
+need to check the various states along the way.
+Our fixtures in conftest.py contain the states. 
+
+This is an peek into the expected states...
 
 State  action   bar   goal 
 0      '',[]    []    0
