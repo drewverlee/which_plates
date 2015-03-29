@@ -5,14 +5,20 @@
 """
 
 
-def a_star_search(state, fringe):
-    visted = set()
+def a_star_search(root, Que):
+    """return final state
+    root : state: root state
+    Que  : que   : that can add and remove states based on priority
+    rtype : State : final state
+    """
+    fringe = Que([root])
+    visited = set()
+
     while fringe:
         state = fringe.deque()
         if state.at_final_goal():
             return state
         if state.node not in visited:
-            visted.add(state.node)
+            visited.add(state.node)
             for child in state.children():
                 fringe.enqueue(child)
-

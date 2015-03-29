@@ -4,6 +4,7 @@ Contains the State class
 from collections import Counter, namedtuple
 
 Action = namedtuple("Action", ["action", "weights"])
+Priority = namedtuple("Priority", ["f_score", "goal_i"])
 
 class State:
 
@@ -12,7 +13,9 @@ class State:
     and the action to reach that node.
 
     Its specific to the context of the problem, 
-    in this case the search for the min wasted effort branch. 
+    in this case the search for the min wasted effort branch. Which, because,
+    we always choose the heavier plates first is
+    also the branch that minimizes the amount of plates used.
 
     It contains meta information about the problem such as goals and 
     the path cost to reach this point.
@@ -38,21 +41,46 @@ class State:
         
         self.goal = self.goals[goal_i]
 
+
     def __repr__(self):
         return "{0}, {1}, {2}".format(self.node(), self.action, self.path_cost)
+
 
     def __str__(self):
         return "\nnode: {0}\naction: {1}\npath_cost: {2}".\
             format(self.node(), self.action, self.path_cost)
 
+
     def node(self):
         """a node in the graph"""
         return tuple(self.bar), self.goal_i
+
 
     def at_final_goal(self):
         """check if were at our final goal"""
         # recall that we add 0 to the end of the goals
         return self.goal_i == len(self.goals) - 1
+
+
+    def f_score(self):
+        """return the f score"""
+        return self.g_score() + self.h_score()
+
+
+    def h_score(self):
+        """return the h score"""
+        return self.goal - sum(self.bar)
+
+
+    def g_score(self):
+        """return the g score"""
+        return self.path_cost
+
+
+    def priority(self):
+        """return priority of the state"""
+        return Priority(self.f_score(), self.goal_i)
+
 
     def children(self):
         """create children of state
@@ -87,7 +115,8 @@ class State:
 
 
         return children if children else [self.remove_child()]
-                
+
+
     def lift_child(self):
         """create a child that represents the lift plates state"""
         action    = Action("l", self.bar)
@@ -99,7 +128,8 @@ class State:
         parent    = self
 
         return State(action, bar, plates, path_cost, self.goals, goal_i, parent) 
-        
+
+
     def add_child(self, weight):
         """create a child that represents the add plates state"""
         action    = Action("+", [weight])
@@ -129,5 +159,3 @@ class State:
             plates.update({weight: 1})
 
         return State(action, bar, plates, path_cost, self.goals, goal_i, parent) 
-
-            

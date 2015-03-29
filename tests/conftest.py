@@ -3,8 +3,12 @@ contains fixtures, which are used to setup and tear down tests
 """
 
 import pytest
-from state import State, Action
+from mock import MagicMock
 from collections import Counter
+
+from state import State, Action
+from priority_que import PriorityQue
+from a_star_search import a_star_search
 
 
 # see the readme in the test_children directory for an explanation of the
@@ -23,6 +27,7 @@ def state_0():
 
     return State(action, bar, plates, path_cost, goals, goal_i, parent)
 
+
 @pytest.fixture(scope="module")
 def state_1(state_0):
     action    = Action("+", [20])
@@ -34,6 +39,7 @@ def state_1(state_0):
     parent    = state_0
 
     return State(action, bar, plates, path_cost, goals, goal_i, parent)
+
 
 @pytest.fixture(scope="module")
 def state_2(state_1):
@@ -47,6 +53,7 @@ def state_2(state_1):
 
     return State(action, bar, plates, path_cost, goals, goal_i, parent)
 
+
 @pytest.fixture(scope="module")
 def state_3(state_2):
     action    = Action("-", [20])
@@ -58,6 +65,7 @@ def state_3(state_2):
     parent    = state_2
 
     return State(action, bar, plates, path_cost, goals, goal_i, parent)
+
 
 @pytest.fixture(scope="module")
 def state_4(state_3):
@@ -71,6 +79,7 @@ def state_4(state_3):
 
     return State(action, bar, plates, path_cost, goals, goal_i, parent)
 
+
 @pytest.fixture(scope="module")
 def state_5(state_4):
     action    = Action("l", [25])
@@ -82,4 +91,41 @@ def state_5(state_4):
     parent    = state_4
 
     return State(action, bar, plates, path_cost, goals, goal_i, parent)
+
+
+@pytest.fixture()
+def priority_que():
+    return PriorityQue([])
+
+
+@pytest.fixture(scope="module")
+def priority_que_with_items(mock_item_one, mock_item_two):
+    return PriorityQue([mock_item_one, mock_item_two])
+
+
+@pytest.fixture(scope="module")
+def mock_item_one():
+    def side_effect(): 
+        return 1
+    item_one = MagicMock()
+    item_one.priority = side_effect
+    return item_one
+
+
+@pytest.fixture(scope="module")
+def mock_item_two():
+    def side_effect(): 
+        return 2
+    item_two = MagicMock()
+    item_two.priority = side_effect
+    return item_two
+
+@pytest.fixture(scope="module")
+def a_star_search_with_state_0(state_0):
+    return a_star_search(state_0, PriorityQue)
+
+
+
+
+
 
