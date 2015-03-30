@@ -189,7 +189,7 @@ def state_start_large():
 
     
 @pytest.fixture(scope="module")
-def states():
+def states_for_timming():
     states = []
     N = 5
     for n in range(1, N):
@@ -214,3 +214,6 @@ def states():
         state_start = State(action, bar, plates, path_cost, path_used, goals, goal_i, parent)
         states.append(state_start)
     return states
+
+
+

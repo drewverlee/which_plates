@@ -15,13 +15,13 @@ def a_star_search(root, Que):
     rtype : State : final state
     """
     fringe = Que([root])
-    visited = set()
+    visited = set(root.node())
     
     while fringe:
         state = fringe.deque()
         if state.at_final_goal():
             return state
-        elif state.node not in visited:
-            visited.add(state.node())
-            for child in state.children():
+        for child in state.children():
+            if child.node() not in visited:
+                visited.add(child.node())
                 fringe.enqueue(child)

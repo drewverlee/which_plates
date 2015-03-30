@@ -117,8 +117,11 @@ class State:
         return self.f_score() < other.f_score()
 
     def priority(self):
-        """return priority of the state"""
-        return Priority(self.f_score(), self.goal_i, self.path_used)
+        """return priority of the state
+        
+        the priority highest priority is the lowest number
+        """
+        return Priority(self.f_score(), len(self.goals) - self.goal_i, self.path_used)
 
     def f_score(self):
         """return the f score"""
@@ -176,7 +179,7 @@ class State:
                 weights_removed.append(weight)
                 children.append(self.remove_child(weights_removed))
 
-        return children if children else [self.remove_child()]
+        return children
 
     def lift_child(self):
         """create a child that represents the lift plates state"""
