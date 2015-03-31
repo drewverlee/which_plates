@@ -1,7 +1,7 @@
 """
 Description
-    contains the functionality for finding all the closets possible
-        goals to our original goals.
+    Contains the functionality for finding all the closets possible
+    goals to our original goals.
 
 Functions
     * make_totals : Makes all possible totals from a bag of numbers

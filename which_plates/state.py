@@ -1,29 +1,26 @@
 """
-Contains: 
+Description
+    Contains the State class and its supporting classes that help to build
+    the graph in A*Search.
 
-* the State class
-* Action namedtuple
-* Priority namedtuple
+Classes
+    * State
+    * Action
+    * Priority
+    * Node
 """
 from collections import Counter, namedtuple
 
 Action = namedtuple("Action", ["move", "weights"])
-Priority = namedtuple("Priority", ["f_score", "goal_i", "used"])
+Priority = namedtuple("Priority", ["f_score", "used", "goal_i"])
 Node = namedtuple("Node", ["bar", "goal_i"])
 
 class State:
 
     """ 
-    State represents a state A* Search. It encapsulates a node in the graph
-    and the action to reach that node.
-
-    Its specific to the context of the problem, 
-    in this case the search for the min wasted effort branch. Which, because,
-    we always choose the heavier plates first is
-    also the branch that minimizes the amount of plates used.
-
-    It contains meta information about the problem such as goals and 
-    the path cost to reach this point.
+    State represents a state in A* Search. It encapsulates a node in the graph
+    and the action to reach that node, as well as some meta data about the 
+    problem such as the plates, goals, and path costs.
     """
 
     def __init__(self, action, bar, plates, path_cost, path_used, goals, goal_i, parent):
@@ -111,11 +108,9 @@ class State:
                     f_score   = self.f_score()
                 )
 
-    # TODO, i don't think i should need this once priority is corrent,
-    # it indicates a tie that i didn't explicit break
     def __lt__(self, other):
-        return self.f_score() < other.f_score()
-
+        """How to sort states"""
+        self.f_score() < other.f_score()
 
     # CLASS METHOD TODO is there a decorator or something?
     def make_start_state(goals, plates):
@@ -140,7 +135,7 @@ class State:
         
         the priority highest priority is the lowest number
         """
-        return Priority(self.f_score(), self.path_used, len(self.goals) - self.goal_i)
+        return Priority(self.f_score(), self.path_used, -self.goal_i)
 
     def f_score(self):
         """return the f score"""
@@ -232,21 +227,21 @@ class State:
 
         return State(action, bar, plates, path_cost, path_used, self.goals, goal_i, parent) 
 
-    def remove_child(self, pstate, weights_removed):
+    def remove_child(self, parent_state, weights_removed):
         """create a child that represents the remove plates state"""
-        bar       = pstate.bar[:-len(weights_removed)]
+        bar       = parent_state.bar[:-len(weights_removed)]
         action    = Action('-', weights_removed)
-        plates    = pstate.plates.copy()
+        plates    = parent_state.plates.copy()
         edge_cost = sum(weights_removed)
-        goal_i    = pstate.goal_i
-        path_cost = pstate.path_cost + edge_cost if pstate.parent else edge_cost
-        path_used = pstate.path_used + len(weights_removed)
-        parent    = pstate
+        goal_i    = parent_state.goal_i
+        path_cost = parent_state.path_cost + edge_cost if parent_state.parent else edge_cost
+        path_used = parent_state.path_used + len(weights_removed)
+        parent    = parent_state
         
         for weight in weights_removed:
             plates.update({weight: 1})
 
-        return State(action, bar, plates, path_cost, path_used, pstate.goals, goal_i, parent) 
+        return State(action, bar, plates, path_cost, path_used, parent_state.goals, goal_i, parent) 
 
     def path(self):
         """returns the path of actions leading to this state
