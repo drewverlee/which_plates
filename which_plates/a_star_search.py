@@ -1,6 +1,6 @@
 """
 Functions:
-    a_star_search: a searching algorithm
+    a_star_search: a searching algorithm that.
 """
 
 
