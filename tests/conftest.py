@@ -7,7 +7,7 @@ from mock import MagicMock
 from collections import Counter
 
 from state import State, Action
-from priority_que import PriorityQue
+from priority_queue import PriorityQueue
 from a_star_search import a_star_search
 
 #TODO organize fixtures
@@ -101,13 +101,13 @@ def state_5(state_4):
 
 
 @pytest.fixture()
-def priority_que():
-    return PriorityQue([])
+def priority_queue():
+    return PriorityQueue([])
 
 
 @pytest.fixture(scope="module")
-def priority_que_with_items(mock_item_one, mock_item_two):
-    return PriorityQue([mock_item_one, mock_item_two])
+def priority_queue_with_items(mock_item_one, mock_item_two):
+    return PriorityQueue([mock_item_one, mock_item_two])
 
 
 @pytest.fixture(scope="module")
@@ -130,7 +130,7 @@ def mock_item_two():
 
 @pytest.fixture(scope="module")
 def a_star_search_with_state_0(state_0):
-    return a_star_search(state_0, PriorityQue)
+    return a_star_search(state_0, PriorityQueue)
 
 
 # actual problem setup
@@ -163,7 +163,7 @@ def state_finish_mocked():
 
 @pytest.fixture(scope="module")
 def a_star_search_with_state_start(state_start):
-    return a_star_search(state_start, PriorityQue)
+    return a_star_search(state_start, PriorityQueue)
 
 @pytest.fixture(scope="module")
 def state_start_large():

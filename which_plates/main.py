@@ -8,7 +8,7 @@ contains
 from closet import make_totals, find_closet
 from goals import make_goals
 from a_star_search import a_star_search
-from priority_que import PriorityQue
+from priority_queue import PriorityQueue
 from state import State
 
 # #TODO make sure we have "returns" everywhere
@@ -25,11 +25,11 @@ def main(goal, plates, percents=[0.2, 0.4, 0.6, 0.8, 1]):
     :percents: list: what percent of our goal lift we want for our warm-up sets
     :returns: list: path of least effort 
     """
-    all_weights = make_totals(list(plates.elements()))
-    goals = make_goals(goal, percents)
-    closets_goals = find_closet(all_weights, goals)
-    root = State.make_start_state(goals, plates)
-    final_state = a_star_search(root, PriorityQue)
+    all_weights          = make_totals(list(plates.elements()))
+    goals                = make_goals(goal, percents)
+    closets_goals        = find_closet(all_weights, goals)
+    root                 = State.make_start_state(goals, plates)
+    final_state          = a_star_search(root, PriorityQueue)
     path_of_least_effort = final_state.path()
     
     return path_of_least_effort[1:]

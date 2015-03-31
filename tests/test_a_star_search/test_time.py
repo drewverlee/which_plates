@@ -12,9 +12,9 @@ def test_timed_runs():
         time = timeit.timeit(
             """
             from a_star_search import a_star_search;
-            from priority_que import PriorityQue;
+            from priority_queue import PriorityQueue;
             from conftest import states_for_timming;
-            a_star_search(states_for_timming()[{n}], PriorityQue);
+            a_star_search(states_for_timming()[{n}], PriorityQueue);
             """.format(n=n), number=5)
         times.append(time)
 
@@ -25,9 +25,9 @@ def test_timed_runs():
 def test_with_large_problem_should_run_in_under_5_seconds():
     time = timeit.timeit("""
         from a_star_search import a_star_search;
-        from priority_que import PriorityQue;
+        from priority_queue import PriorityQueue;
         from conftest import state_start_large;
-        a_star_search(state_start_large(), PriorityQue)""", number=5)
+        a_star_search(state_start_large(), PriorityQueue)""", number=5)
 
     assert time < MAX_ALLOWED_SECONDS
 
