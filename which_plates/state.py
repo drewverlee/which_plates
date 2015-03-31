@@ -187,16 +187,20 @@ class State:
             return [self.lift_child()]
 
         children = []
-
+        
         for weight, quantity in self.plates.items():
             if quantity > 0 and sum(self.bar) + weight <= self.goal:
                 children.append(self.add_child(weight))
 
+        current_state = self
         if not children:
+            while current_state.action.move != 'l' and current_state.parent != None:
+                current_state = current_state.parent
+
             weights_removed = []
-            for weight in reversed(self.bar):
+            for weight in reversed(current_state.bar):
                 weights_removed.append(weight)
-                children.append(self.remove_child(weights_removed.copy()))
+                children.append(current_state.remove_child(current_state, weights_removed.copy()))
 
         return children
 
@@ -228,21 +232,21 @@ class State:
 
         return State(action, bar, plates, path_cost, path_used, self.goals, goal_i, parent) 
 
-    def remove_child(self, weights_removed):
+    def remove_child(self, pstate, weights_removed):
         """create a child that represents the remove plates state"""
-        bar       = self.bar[:-len(weights_removed)]
+        bar       = pstate.bar[:-len(weights_removed)]
         action    = Action('-', weights_removed)
-        plates    = self.plates.copy()
+        plates    = pstate.plates.copy()
         edge_cost = sum(weights_removed)
-        goal_i    = self.goal_i
-        path_cost = self.path_cost + edge_cost if self.parent else edge_cost
-        path_used = self.path_used + len(weights_removed)
-        parent    = self
+        goal_i    = pstate.goal_i
+        path_cost = pstate.path_cost + edge_cost if pstate.parent else edge_cost
+        path_used = pstate.path_used + len(weights_removed)
+        parent    = pstate
         
         for weight in weights_removed:
             plates.update({weight: 1})
 
-        return State(action, bar, plates, path_cost, path_used, self.goals, goal_i, parent) 
+        return State(action, bar, plates, path_cost, path_used, pstate.goals, goal_i, parent) 
 
     def path(self):
         """returns the path of actions leading to this state
