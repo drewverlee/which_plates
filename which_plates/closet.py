@@ -23,7 +23,7 @@ def make_totals(bag):
         {0, 1, 2, 3}
 
     Arguments
-        * bag    : list : a multiset of numbers
+        * bag  : list : a multiset of numbers
 
     Returns
         totals : set  : all possible totals

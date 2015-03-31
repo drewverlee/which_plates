@@ -1,14 +1,17 @@
 """
-contains:
+Description
+    PriorityQue allows for simple interface for enqueue and deque any object
+    that has a priority function.
 
-* PriorityQue: which extends list class and provides enqueue and deque methods
+Classes
+    * PriorityQue: which extends list class.
 """
 
 import heapq
 
 
 class PriorityQue(list):
-    
+
     """ PriorityQue adds and removes items based on the provided priority """
 
     def __init__(self, items):
@@ -16,10 +19,7 @@ class PriorityQue(list):
             self.enqueue(item)
 
     def enqueue(self, item):
-        """add item
-        
-        item should have a priority method
-        """
+        """Add item to the que"""
         heapq.heappush(self, (item.priority(), item))
 
     def deque(self):
