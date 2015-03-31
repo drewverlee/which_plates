@@ -214,6 +214,3 @@ def states_for_timming():
         state_start = State(action, bar, plates, path_cost, path_used, goals, goal_i, parent)
         states.append(state_start)
     return states
-
-
-

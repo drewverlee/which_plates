@@ -9,8 +9,8 @@ from collections import defaultdict
 def make_totals(bag):
     """finds the totals for all combinations of the numbers in bag
 
-    :bag: a bag of numbers
-    :returns: a set of totals
+    : bag     : list         : a bag of numbers
+    : returns : a set of totals
     """
     start = defaultdict(set)
     EMPTY_SET_TOTAL = 0
@@ -44,7 +44,7 @@ def next_gen(parent_gen, bag, closed):
     return nxt_gen
 
 def find_closet(numbers, goals, tie_breaker=min):
-    """finds the cloests number to a goal in a set of goals
+    """finds the closet number to a goal in a set of goals
 
     :numbers: some numbers
     :goals: numbers were hopeing to get close to

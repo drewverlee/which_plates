@@ -116,12 +116,31 @@ class State:
     def __lt__(self, other):
         return self.f_score() < other.f_score()
 
+
+    # CLASS METHOD TODO is there a decorator or something?
+    def make_start_state(goals, plates):
+        """returns the start state
+
+        :goals: tuple:  goals of the lift
+        :plates: Counter: plates we have to use
+        :returns: State: the start state
+        """
+        action    = Action("", [])
+        bar       = []
+        path_cost = 0
+        path_used = 0
+        goal_i    = 0
+        parent    = None
+        goals     = goals + (0,) #NOTE to be constant make children, maybe goals should be a list
+        return State(action, bar, plates, path_cost, path_used, goals, goal_i, parent)
+
+    # INSTANTS METHOD
     def priority(self):
         """return priority of the state
         
         the priority highest priority is the lowest number
         """
-        return Priority(self.f_score(), len(self.goals) - self.goal_i, self.path_used)
+        return Priority(self.f_score(), self.path_used, len(self.goals) - self.goal_i)
 
     def f_score(self):
         """return the f score"""
@@ -177,7 +196,7 @@ class State:
             weights_removed = []
             for weight in reversed(self.bar):
                 weights_removed.append(weight)
-                children.append(self.remove_child(weights_removed))
+                children.append(self.remove_child(weights_removed.copy()))
 
         return children
 
@@ -243,4 +262,9 @@ class State:
         path.reverse()
 
         return path
+
+
+        
+        
+
 
