@@ -3,6 +3,7 @@ contains fixtures, which are used to setup and tear down tests
 """
 
 import pytest
+from os import environ
 from mock import MagicMock
 from collections import Counter
 
@@ -11,6 +12,8 @@ from priority_queue import PriorityQueue
 from a_star_search import a_star_search
 
 #TODO organize fixtures
+
+
 
 # see the readme in the test_children directory for an explanation of the
 # setups
@@ -214,3 +217,5 @@ def states_for_timming():
         state_start = State(action, bar, plates, path_cost, path_used, goals, goal_i, parent)
         states.append(state_start)
     return states
+
+

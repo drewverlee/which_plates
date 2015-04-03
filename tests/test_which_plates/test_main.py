@@ -6,10 +6,10 @@ from state import Action
 
 
 def test_main():
-    plates = Counter({45:2, 35:2, 25:2, 15:2, 10:2, 5:2, 2.5: 2})
-    goal = 100
-    path = main(goal, plates)
-    # goals should be 20, 40, 60, 80, 100
+    plates   = Counter({45:2, 35:2, 25:2, 15:2, 10:2, 5:2, 2.5: 2})
+    goal     = 100
+    percents = (.20, .40, .60, .80, 1)
+    path = main(goal, plates, percents)
     assert path == \
         [
             Action(move='+', weights=[5]),

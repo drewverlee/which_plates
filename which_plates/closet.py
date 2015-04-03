@@ -90,7 +90,7 @@ def find_closet(numbers, goals, tie_breaker=min):
 
     Example
         >>> find_closet([1,3], [2], min)
-        [1]
+        (1,)
 
     Arguments
         * numbers     : list : Numbers we can draw choose between.
@@ -121,4 +121,4 @@ def find_closet(numbers, goals, tie_breaker=min):
             closet[i] = tie_breaker(above[i], below[i])
         else:
             closet[i] = min(above[i], below[i])
-    return closet
+    return tuple(closet)
