@@ -117,7 +117,7 @@ Lets compare:
 |---------|-----------|------|
 | 1       | greedy    | 15   |
 | 2       | None      | 30   |
-| 3       | A*        |      |
+| 3       | A*        | 10   |
 
 What's more, example 3 is *provable* the best you can do 
 (though we wont do that here).
