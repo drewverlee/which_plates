@@ -22,17 +22,16 @@ Setup
 ===================================================
 Before we look at an in example lets, make the math some what easier:
 
-    were going to cut the goal weight and number of plates in half. 
-    so for example, a goal weight of 50 with plates [25, 25] would just be
-    goal = 25, with plates = [25]
+were going to cut the goal weight and number of plates in half. 
+so for example, a goal weight of 50 with plates [25, 25] would just be
+goal = 25, with plates = [25]
 
-    were also going to set our bar weight equal to 0
-
-    and we have to decide how to visualize the bar:
+were also going to set our bar weight equal to 0
+and we have to decide how to visualize the bar:
 
     [----- we take weight off the right side of the bar --> ]
 
-    so if we have a bar like [25, 15, 5] and we want to remove the top plate we get '5'.
+so if we have a bar like [25, 15, 5] and we want to remove the top plate we get '5'.
 
 Now for our example:
 
