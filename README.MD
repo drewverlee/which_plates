@@ -1,3 +1,15 @@
+The Heuristic
+=====================================================
+Whats novel (what I discovered) is that their is a simple Heuristic for
+the A*Search algorithm that allows for a 'fast enough' solution to the problem
+described below.
+
+The Heuristic as follows. We consider all plates we could add
+whose weight plus the weight of those on the bar is less then our current goal.
+But we choose to pursue the path with the 
+  minimal (current_goal - total_weight) + total weight-removed-from-the-bar)
+
+
 Stating the problem
 ===================================================
 The goal is to minimize the amount of 'un-necessary' weight lifted.
@@ -82,29 +94,30 @@ But we can do better?
 Example 3 
 ==================================================
   
-  [5, 10, 5] = goal 20
+[5, 10, 5] = goal 20
 
-  thats not a conventional start, and to make it weirder were going to take off a 5 lb
-  right now (-5) before we even have to...
+thats not a conventional start, and to make it weirder were going to take off a 5 lb
+right now (-5) before we even have to...
 
-  [5, 10, 25] = goal 40
-  [5, 10, 25, 15, 5] = goal 60
+[5, 10, 25] = goal 40
+[5, 10, 25, 15, 5] = goal 60
 
-  now we take off another 5 before moving on...
+now we take off another 5 before moving on...
 
-  [5, 10, 25, 15, 25] = goal 80
-  [5, 10, 25, 15, 25, 15, 5] = final goal 100
+[5, 10, 25, 15, 25] = goal 80
+[5, 10, 25, 15, 25, 15, 5] = final goal 100
 
-  in total we removed 10!
+in total we removed 10!
 
 
 Lets compare:
 =================================================
 
-Example  | heuristic  | cost
-1        | greedy     | 15
-2        | None       | 30
-3        | A*Search   | 10
+| example | heuristic | cost |
+|---------|-----------|------|
+| 1       | greedy    | 15   |
+| 2       | None      | 30   |
+| 3       | A*        |      |
 
 What's more, example 3 is *provable* the best you can do 
 (though we wont do that here).
