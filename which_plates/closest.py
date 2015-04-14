@@ -94,7 +94,7 @@ def find_closest(candidates, goal, tie_breaker=min):
 
     Example
         >>> find_closest([1,3], 2, min)
-        (1,)
+        1
 
     Arguments
         * numbers     : tuple : a sorted list of candidate numbers we can draw choose between.
