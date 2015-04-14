@@ -3,11 +3,11 @@
 Functions
     * which_plates : finds path of least effort
 """
-from closet import make_totals, find_closet
-from goals import make_goals
-from a_star_search import a_star_search
-from priority_queue import PriorityQueue
-from state import State
+from .closet import make_totals, find_closet
+from .goals import make_goals
+from .a_star_search import a_star_search
+from .priority_queue import PriorityQueue
+from .state import State
 
 
 def which_plates(goal, plates, percents):
