@@ -20,13 +20,13 @@ def make_totals(bag):
 
     Example
         >>> make_totals([1,2])
-        {0, 1, 2, 3}
+        [0, 1, 2, 3]
 
     Arguments
         * bag  : list : a multiset of numbers
 
     Returns
-        totals : set  : all possible totals
+        totals : list  : ordered totals
     """
     start = {}
     EMPTY_SET_TOTAL = 0
@@ -37,7 +37,7 @@ def make_totals(bag):
     while len(generations) <= len(bag):
         generations.append(next_gen(generations[-1], bag, closed))
         totals.update(generations[-1])
-    return totals
+    return sorted(list(totals))
 
 
 def next_gen(parent_gen, bag, closed):
