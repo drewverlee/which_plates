@@ -4,11 +4,14 @@ Whats novel (what I discovered) is that their is a simple Heuristic for
 the A*Search algorithm that allows for a 'fast enough' solution to the problem
 described below.
 
-The Heuristic is as follows. We consider all plates we could add
-whose weight plus the weight of those on the bar is less then our current goal.
-But we choose to pursue the path with the minimal:
+The Heuristic is as follows:
 
-    *((current_goal - total_weight) + total weight-removed-from-the-bar)*
+    *((current_goal - total_weight_on_bar) + total-weight-removed-from-the-bar)*
+
+Once we have chosen the node that best fits this criteria, we expand this path.
+To expand the path we consider all plates we could add to the bar
+whose weight plus the weight of those already on the bar is less then our current goal.
+
 
 
 Stating the problem
@@ -20,7 +23,7 @@ bar or taking it off.
 
 Setup
 ===================================================
-Before we look at an in example lets, make the math some what easier:
+Before we look at an in example, lets make the math some what easier to visualize.
 
 were going to cut the goal weight and number of plates in half. 
 so for example, a goal weight of 50 with plates [25, 25] would just be
