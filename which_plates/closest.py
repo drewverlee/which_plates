@@ -1,14 +1,15 @@
 """
 Description
-    Contains the functionality for finding all the closets possible
+    Contains the functionality for finding all the closest possible
     goals to our original goals.
 
 Functions
-    * make_totals : Makes all possible totals from a bag of numbers
-    * next_gen    : Makes the next set of numbers based on the parent
+    * _make_totals : Makes all possible totals from a bag of numbers
+    * _next_gen    : Makes the next set of numbers based on the parent
         generation
-    * closet      : Finds the closet number to a goal in a set of goals
+    * _find_closest      : Finds the closest number to a goal in a set of goals
 """
+from bisect import bisect_left
 
 
 def make_totals(bag):
@@ -80,8 +81,11 @@ def next_gen(parent_gen, bag, closed):
     return nxt_gen
 
 
-def find_closet(numbers, goals, tie_breaker=min):
-    """Finds the closet number to a goal in a set of goals
+
+
+
+def find_closest(candidates, goal, tie_breaker=min):
+    """Finds the closest number to a goal in a set of goals
 
     Description
         Given a set of numbers and goals we pick from amongst all the numbers
@@ -89,36 +93,29 @@ def find_closet(numbers, goals, tie_breaker=min):
             tie breaker.
 
     Example
-        >>> find_closet([1,3], [2], min)
+        >>> find_closest([1,3], 2, min)
         (1,)
 
     Arguments
-        * numbers     : list : Numbers we can draw choose between.
-        * goals       : list : A list of the numbers were trying to get as close
+        * numbers     : tuple : a sorted list of candidate numbers we can draw choose between.
+        * goals       : tuple : A list of the numbers were trying to get as close
             to as possible.
         * tie_breaker : func : How to break ties when were equally close above
             and below a goal.
     Returns
-        closets       : list : A list of numbers that are as close to the goals
+        closests       : tuple : A list of numbers that are as close to the goals
             as we can get given the numbers provided.
     """
-    above  = [float('inf')] * len(goals)
-    below  = [float('inf')] * len(goals)
-    closet = [None] * len(goals)
-
-    for i, goal in enumerate(goals):
-        for num in numbers:
-            possible_closet = goal - num
-            if possible_closet == 0:
-                above[i], below[i] = num, num
-            elif possible_closet > 0 and abs(possible_closet) < below[i]:
-                below[i] = num
-            elif possible_closet < 0 and abs(possible_closet) < above[i]:
-                above[i] = num
-
-    for i in range(len(goals)):
-        if abs(above[i] - goals[i]) == abs(below[i] - goals[i]):
-            closet[i] = tie_breaker(above[i], below[i])
-        else:
-            closet[i] = min(above[i], below[i])
-    return tuple(closet)
+    pos = bisect_left(candidates, goal)
+    before = candidates[pos - 1]
+    after = candidates[pos]
+    if pos == 0:
+        return candidates[0]
+    elif pos == len(candidates):
+        return candidates[-1]
+    elif candidates[pos] == goal: 
+        return goal
+    elif after - goal < goal - before:
+       return after
+    else:
+       return tie_breaker(after, before)

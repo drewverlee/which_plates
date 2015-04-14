@@ -11,4 +11,4 @@ from closet import find_closet
     ((10, 20),  (15, 25),  max,          (20, 20)),
 ])
 def test_find_closets(numbers, goals, tie_breaker, expected_closet):
-    assert find_closet(numbers, goals, tie_breaker) == expected_closet
+    assert [find_closet(numbers, goal, tie_breaker) for goal in goals] == expected_closet
