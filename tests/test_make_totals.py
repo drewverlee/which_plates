@@ -1,5 +1,5 @@
 import pytest
-from closet import make_totals
+from make_totals import make_totals
 
 @pytest.mark.parametrize(
     "bag,               expected_totals",  [
