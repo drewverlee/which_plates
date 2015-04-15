@@ -4,23 +4,23 @@ Description
     the graph in A*Search.
 
 Classes
-    * State    : A node in the graph and the action to reach it.
-    * Action   : namedtuple.
-    * Priority : namedtuple.
-    * Node     : namedtuple.
+    * _State    : A node in the graph and the action to reach it.
+    * _Action   : namedtuple.
+    * _Priority : namedtuple.
+    * _Node     : namedtuple.
 """
 from collections import namedtuple
 
 
-Action = namedtuple("Action", ["move", "weights"])
-Priority = namedtuple("Priority", ["f_score", "used", "goal_i"])
-Node = namedtuple("Node", ["bar", "goal_i"])
+_Action = namedtuple("_Action", ["move", "weights"])
+_Priority = namedtuple("_Priority", ["f_score", "used", "goal_i"])
+_Node = namedtuple("_Node", ["bar", "goal_i"])
 
 
-class State:
+class _State:
 
     """
-    State represents a state in A* Search. It encapsulates a node in the graph
+    _State represents a state in A* Search. It encapsulates a node in the graph
     and the action to reach that node, as well as some meta data about the
     problem such as the plates, goals, and path costs.
     """
@@ -32,7 +32,7 @@ class State:
         plates    : counter: the number of available plates.
         path_cost : int    : the cost of this branch.
         path_used : int    : total number of plates used/moved in this branch.
-        parent    : State  : the parent State.
+        parent    : _State  : the parent _State.
         goals     : tuple  : the weights we want to lift.
         goal_i    : int    : the current index of our goal
         """
@@ -70,9 +70,9 @@ class State:
                 goal      = self.goal,
                 goal_i    = self.goal_i,
                 goals     = self.goals,
-                g_score   = self.g_score(),
-                h_score   = self.h_score(),
-                f_score   = self.f_score()
+                g_score   = self._g_score(),
+                h_score   = self._h_score(),
+                f_score   = self._f_score()
             )
 
     def __str__(self):
@@ -104,13 +104,13 @@ class State:
                 goal_i    = self.goal_i,
                 goals     = self.goals,
 
-                g_score   = self.g_score(),
-                h_score   = self.h_score(),
-                f_score   = self.f_score()
+                g_score   = self._g_score(),
+                h_score   = self._h_score(),
+                f_score   = self._f_score()
             )
 
     def __lt__(self, other):
-        return self.f_score() < other.f_score()
+        return self._f_score() < other._f_score()
 
     @classmethod
     def make_start_state(cls, goals, plates):
@@ -123,14 +123,14 @@ class State:
         Returns
             start state : state :
         """
-        action    = Action("", [])
+        action    = _Action("", [])
         bar       = []
         path_cost = 0
         path_used = 0
         goal_i    = 0
         parent    = None
         goals     = goals + (0,)
-        return State(action, bar, plates, path_cost, path_used, goals, goal_i,
+        return _State(action, bar, plates, path_cost, path_used, goals, goal_i,
             parent)
 
     def priority(self):
@@ -140,13 +140,13 @@ class State:
             the priority highest priority is the lowest number so
             (1, 2, 3) has a higher priority then (2, 0, 0)
         """
-        return Priority(self.f_score(), self.path_used, -self.goal_i)
+        return _Priority(self._f_score(), self.path_used, -self.goal_i)
 
-    def f_score(self):
+    def _f_score(self):
         """Return the f score."""
-        return self.g_score() + self.h_score()
+        return self._g_score() + self._h_score()
 
-    def g_score(self):
+    def _g_score(self):
         """Return the g score
 
         Description
@@ -158,7 +158,7 @@ class State:
         """
         return self.path_cost
 
-    def h_score(self):
+    def _h_score(self):
         """Return the h score.
 
         Description
@@ -178,7 +178,7 @@ class State:
 
     def node(self):
         """Returns states node representation"""
-        return Node(tuple(self.bar), self.goal_i)
+        return _Node(tuple(self.bar), self.goal_i)
 
     def at_final_goal(self):
         """Check if were at our final goal"""
@@ -201,13 +201,13 @@ class State:
             create children we know wont be expanded due to the closed set
         """
         if sum(self.bar) == self.goal:
-            return [self.lift_child()]
+            return [self._lift_child()]
 
         children = []
 
         for weight, quantity in self.plates.items():
             if quantity > 0 and sum(self.bar) + weight <= self.goal:
-                children.append(self.add_child(weight))
+                children.append(self._add_child(weight))
 
         current_state = self
         if not children:
@@ -217,15 +217,15 @@ class State:
             weights_removed = []
             for weight in reversed(current_state.bar):
                 weights_removed.append(weight)
-                children.append(current_state.remove_child(current_state,
+                children.append(current_state._remove_child(current_state,
                     weights_removed.copy()))
 
         return children
 
-    def lift_child(self):
+    def _lift_child(self):
         """Create a child that represents the lift plates state."""
         bar       = self.bar.copy()
-        action    = Action("l", bar)
+        action    = _Action("l", bar)
         plates    = self.plates.copy()
         edge_cost = 0
         goal_i    = self.goal_i + 1
@@ -233,13 +233,13 @@ class State:
         path_used = self.path_used + 0
         parent    = self
 
-        return State(action, bar, plates, path_cost, path_used, self.goals,
+        return _State(action, bar, plates, path_cost, path_used, self.goals,
             goal_i, parent)
 
-    def add_child(self, weight):
+    def _add_child(self, weight):
         """Create a child that represents the add plates state."""
         bar       = self.bar + [weight]
-        action    = Action("+", [weight])
+        action    = _Action("+", [weight])
         plates    = self.plates.copy()
         edge_cost = 0
         goal_i    = self.goal_i
@@ -249,13 +249,13 @@ class State:
 
         plates.subtract({weight: 1})
 
-        return State(action, bar, plates, path_cost, path_used, self.goals,
+        return _State(action, bar, plates, path_cost, path_used, self.goals,
             goal_i, parent)
 
-    def remove_child(self, parent_state, weights_removed):
+    def _remove_child(self, parent_state, weights_removed):
         """Create a child that represents the remove plates state."""
         bar       = parent_state.bar[:-len(weights_removed)]
-        action    = Action('-', weights_removed)
+        action    = _Action('-', weights_removed)
         plates    = parent_state.plates.copy()
         edge_cost = sum(weights_removed)
         goal_i    = parent_state.goal_i
@@ -266,7 +266,7 @@ class State:
         for weight in weights_removed:
             plates.update({weight: 1})
 
-        return State(action, bar, plates, path_cost, path_used,
+        return _State(action, bar, plates, path_cost, path_used,
             parent_state.goals, goal_i, parent)
 
     def path(self):

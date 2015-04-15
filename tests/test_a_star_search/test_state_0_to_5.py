@@ -18,9 +18,4 @@ def test_goals(a_star_search_with_state_0, state_5):
 def test_goal_i(a_star_search_with_state_0, state_5):
     assert a_star_search_with_state_0.goal_i == state_5.goal_i
 
-# TODO
-# not sure about this failing, maybe need to define equals on state
-# def test_parent(a_star_search_with_state_0, state_5):
-#     state = a_star_search_with_state_0
-#     assert state.parent == state_5.parent
 

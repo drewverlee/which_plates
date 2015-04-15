@@ -1,5 +1,5 @@
 import pytest
-from closest import find_closest_goals, find_closest
+from closest import _find_closest_goals, _find_closest
 
 @pytest.mark.parametrize(
     "candidates,   goal,     tie_breaker,  expected_closest",  [
@@ -11,7 +11,7 @@ from closest import find_closest_goals, find_closest
     ((5,15),    11,  min,          15),
 ])
 def test_find_closest(candidates, goal, tie_breaker, expected_closest):
-    assert find_closest(candidates, goal, tie_breaker)  == expected_closest
+    assert _find_closest(candidates, goal, tie_breaker)  == expected_closest
 
 @pytest.mark.parametrize(
     "candidates,   goals,     tie_breaker,  expected_closest",  [
@@ -23,4 +23,4 @@ def test_find_closest(candidates, goal, tie_breaker, expected_closest):
     ((10, 20),  (15, 25),  max,          (20, 20)),
 ])
 def test_find_closest_goals(candidates, goals, tie_breaker, expected_closest):
-    assert find_closest_goals(candidates, goals, tie_breaker)  == expected_closest
+    assert _find_closest_goals(candidates, goals, tie_breaker)  == expected_closest

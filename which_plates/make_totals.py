@@ -8,7 +8,7 @@ Functions
         generation
 
 """
-def make_totals(bag):
+def _make_totals(bag):
     """Makes all possible totals from a bag of numbers
 
     Description
@@ -16,7 +16,7 @@ def make_totals(bag):
         can be made by summing up every possible combination.
 
     Example
-        >>> make_totals([1,2])
+        >>> _make_totals([1,2])
         [0, 1, 2, 3]
 
     Arguments
@@ -32,12 +32,12 @@ def make_totals(bag):
     closed = {EMPTY_SET_TOTAL}
     totals = set([0])
     while len(generations) <= len(bag):
-        generations.append(next_gen(generations[-1], bag, closed))
+        generations.append(_next_gen(generations[-1], bag, closed))
         totals.update(generations[-1])
     return sorted(list(totals))
 
 
-def next_gen(parent_gen, bag, closed):
+def _next_gen(parent_gen, bag, closed):
     """Makes the next set of numbers based on the parent generation
 
     Description
@@ -47,7 +47,7 @@ def next_gen(parent_gen, bag, closed):
         in the closed set before and don't expand them again.
 
     Example
-        >>> next_gen({1 : {0}, 2: {1}}, [1, 2], {1, 2})
+        >>> _next_gen({1 : {0}, 2: {1}}, [1, 2], {1, 2})
         {3: {0, 1}}
 
     Arguments

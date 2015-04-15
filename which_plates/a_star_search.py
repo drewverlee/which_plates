@@ -1,10 +1,10 @@
 """
 Functions:
-    a_star_search: a searching algorithm that.
+    _a_star_search: a searching algorithm that.
 """
 
 
-def a_star_search(root, Que):
+def _a_star_search(root, Que):
     """Returns the final/leaf state.
 
     Description

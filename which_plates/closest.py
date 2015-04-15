@@ -10,7 +10,7 @@ Functions
 from bisect import bisect_left
 
 
-def find_closest(candidates, goal, tie_breaker=min):
+def _find_closest(candidates, goal, tie_breaker=min):
     """Finds the closest candidate to a goal in a set of goals
 
     Description
@@ -19,7 +19,7 @@ def find_closest(candidates, goal, tie_breaker=min):
             tie breaker.
 
     Example
-        >>> find_closest([1,3], 2, min)
+        >>> _find_closest([1,3], 2, min)
         1
 
     Arguments
@@ -53,7 +53,7 @@ def find_closest(candidates, goal, tie_breaker=min):
             return after
 
 
-def find_closest_goals(candidates, goals, tie_breaker):
+def _find_closest_goals(candidates, goals, tie_breaker):
     """Return a list of candidates closest to a list of goals."""
-    return tuple([find_closest(candidates, goal, tie_breaker) for goal in goals])
+    return tuple([_find_closest(candidates, goal, tie_breaker) for goal in goals])
     

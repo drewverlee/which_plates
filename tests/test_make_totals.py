@@ -1,5 +1,5 @@
 import pytest
-from make_totals import make_totals
+from make_totals import _make_totals
 
 @pytest.mark.parametrize(
     "bag,               expected_totals",  [
@@ -10,6 +10,6 @@ from make_totals import make_totals
     ((10, 20, 30, 40),  [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
 ])
 def test_make_totals(bag, expected_totals):
-    assert make_totals(bag) == expected_totals
+    assert _make_totals(bag) == expected_totals
 
 

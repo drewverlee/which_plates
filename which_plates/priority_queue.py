@@ -4,13 +4,13 @@ Description
     that has a priority function.
 
 Classes
-    * PriorityQueue: which extends list class.
+    * _PriorityQueue: which extends list class.
 """
 
 import heapq
 
 
-class PriorityQueue(list):
+class _PriorityQueue(list):
 
     """ PriorityQueue adds and removes items based on the provided priority """
 
