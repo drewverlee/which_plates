@@ -1,8 +1,37 @@
+WhichPlates
+===================================================
+WhichPlates minimizes the amount of weight lifted during the plate 
+changing process by choosing the optimal plates to load
+
+Providing a bit more context, 'which plates' helps someone lifting weights 
+choose which weight lifting plates to load. Essential, it's a better "warm up 
+Calculator". Why Better? WhichPlates has a number of advantages:
+
+* If your plates can't possible be combined to reach a weight, it picks the nearest weight possible.
+* It tells you how to load you plates in such a way as to minimize the amount of weight lifted.
+
+To illustrate the second point here is a comparison between several
+plate loading algorithms:
+
+Comparing plate loading algorithms:
+=================================================
+
+| example | heuristic | cost |
+|---------|-----------|------|
+| 1       | greedy    | 15   |
+| 2       | None      | 30   |
+| 3       | A*        | 10   |
+
+The Examples are outlined below in detail. The take away from this is that
+WhichPlates saves you energy for what you really need it for "Lifting 
+more weight at one time". It also saves you the mental energy of having to
+worry about this problem.
+
 The Heuristic
 =====================================================
 Whats novel (what I discovered) is that their is a simple Heuristic for
 the A*Search algorithm that allows for a 'fast enough' solution to the problem
-described below.
+described above.
 
 The Heuristic is as follows:
 
@@ -12,18 +41,10 @@ Once we have chosen the node that best fits this criteria, we expand this path.
 To expand the path we consider all plates we could add to the bar
 whose weight plus the weight of those already on the bar is less then our current goal.
 
-
-
-Stating the problem
+Setup for examples
 ===================================================
-The goal is to minimize the amount of 'un-necessary' weight lifted.
-un-necessary weight is any weight that was lifted in putting weight on the 
-bar or taking it off.
-
-
-Setup
-===================================================
-Before we look at an in example, lets make the math some what easier to visualize.
+Before we look at an in example, lets make the process some what easier to visualize
+on paper.
 
 were going to cut the goal weight and number of plates in half. 
 so for example, a goal weight of 50 with plates [25, 25] would just be
@@ -112,17 +133,7 @@ now we take off another 5 before moving on...
 
 in total we removed 10!
 
-
-Lets compare:
-=================================================
-
-| example | heuristic | cost |
-|---------|-----------|------|
-| 1       | greedy    | 15   |
-| 2       | None      | 30   |
-| 3       | A*        | 10   |
-
-What's more, example 3 is *provable* the best you can do 
-(though we wont do that here).
+Check the table at the top for a comparison of the three examples/algorithms.
 
 so that's is. Feel free to use this idea in your next fitness app.
+
