@@ -15,10 +15,8 @@ def _a_star_search(root, Que):
         In the context of our problem, it finds the leaf node
         of the branch of least weight lifted.
 
-        To find the final state, A star search my carefully create the
-        search tree, making sure that it only creates expands nodes (creates
-        new edges towards the goal) once per node. This is achieved by
-        pruning away nodes we have 'visited' before.
+        To find the final state, A* search must create the
+        search tree by expanding un-visited nodes with the highest priority. 
 
     Example
         Given a Que containing the start_state with goals 20, 25, 0 and plates
@@ -35,11 +33,11 @@ def _a_star_search(root, Que):
         With State '5' being the returned final state.
 
     Arguments
-        root  : State : root state
-        Que   : Que   : any enqueue and deque states based on priority
+        root  : _State : root state
+        Que   : _Que   : any enqueue and deque states based on priority
 
     Returns
-        final state : State : the state which achieves the final goal.
+        final state : _State : the state which achieves the final goal.
     """
     fringe = Que([root])
     visited = set(root.node())
