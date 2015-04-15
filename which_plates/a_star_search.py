@@ -1,6 +1,7 @@
 """
 Functions:
-    _a_star_search: a searching algorithm that.
+    _a_star_search: a searching algorithm for finding the final state along
+    the optimal path.
 """
 
 
@@ -20,8 +21,18 @@ def _a_star_search(root, Que):
         pruning away nodes we have 'visited' before.
 
     Example
-        see tests/test_plates_10_10_15_20_w_goals_20_25_40.py and conftest.py
-            for a convincing example.
+        Given a Que containing the start_state with goals 20, 25, 0 and plates
+            20 and 25 the following search would unfold...
+
+            State  action   bar   goal 
+            0      '',[]    []    0
+            1      +, [20]  [20]  0
+            2      l, [20]  [20]  1
+            3      -, [20]  []    1
+            4      +, [25]  [25]  1
+            5      l, [25]  [25]  2
+
+        With State '5' being the returned final state.
 
     Arguments
         root  : State : root state
