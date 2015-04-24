@@ -53,7 +53,7 @@ def test_100_with_less_plates():
         _Action(move='+', weights=[5]),
         _Action(move='l', weights=[35, 45, 15, 5])]
                 
-def test_100_with_less_plates():
+def test_180_with_my_plates():
     plates   = Counter({55:1, 45:1, 44:1, 35:1, 33:1, 25:1, 22:1, 15:1, 10:1, 5:1})
     goal     = 180
     percents = (.20, .40, .60, .80, 1)

@@ -3,12 +3,12 @@
 Functions
     * which_plates : finds path of least effort
 """
-from make_totals import _make_totals
-from closest import _find_closest_goals
-from goals import _make_goals
-from a_star_search import _a_star_search
-from priority_queue import _PriorityQueue
-from state import _State
+from which_plates.make_totals import _make_totals
+from which_plates.closest import _find_closest_goals
+from which_plates.goals import _make_goals
+from which_plates.a_star_search import _a_star_search
+from which_plates.priority_queue import _PriorityQueue
+from which_plates.state import _State
 
 
 def which_plates(goal, plates, percents):
